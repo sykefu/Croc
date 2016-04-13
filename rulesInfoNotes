@@ -1,0 +1,55 @@
+Use GameBuilder to get a game ready.
+Use GameResolver to play the different parts of a game.
+=>Pirates can play cards.
+=>a game turn works the following:
+==>make all pirates affiliated to every player play a card if player hasn't lost / pirate isn't dead.
+==>use gameresolver to simulate the round
+==>use gameresolver to bite last pirate
+==>use gameresolver to check for victory
+
+=============================================================
+Game:
+All players play a card
+-same number don't move
+-pick lowest value, move to front
+-repeat until all values exhausted
+-back pirate get bitten, lose 1/4 life
+-bitten pirate goes to front
+-bitten pirate recover all cards
+-if a player is out of cards recover
+ex:
+(id:cardvalue)
+(back)r1 g3 b2 p3(front)
+g3 b2 p3 r1
+g3 p3 r1 b2
+g3 bitten owner recover cards, pirate to front
+
+
+TODO:
+
+
+Setup:
+Pirates have random position at start
+5 players: remove 7
+4 players: remove 6&7
+3 players: everyone 2 pirates, victory
+to front pirate when one dies
+2 players: everyone 2 pirates, losing
+a pirate means loss of game.
+
+
+
+graphic:
+choose 6 color for pirates, (done)
+-white black green red purple orange yellow
+match card color to pirate
+work on ui
+(maybe) animation
+engine:
+victory rules
+initial setup
+turn resolution
+limb loss
+ia:
+find interesting gameplay rules
+(maybe) look at iaa course
