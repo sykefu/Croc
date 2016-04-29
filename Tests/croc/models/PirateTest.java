@@ -8,7 +8,7 @@ public class PirateTest {
 
 	@Test
 	public void LimbPoppingTest() {
-		Pirate p = new Pirate(PirateColor.WHITE, 7);
+		Pirate p = new Pirate(PirateColor.WHITE, 7, null);
 		assertEquals(4, p.getLimbCount());
 		p.popLeftArm();
 		assertEquals(false, p.hasLeftArm());

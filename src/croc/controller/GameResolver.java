@@ -1,5 +1,6 @@
 package croc.controller;
 
+import croc.exceptions.NotEveryoneChoseCardException;
 import croc.models.Game;
 import croc.models.Pirate;
 import croc.models.Player;
@@ -26,12 +27,19 @@ public class GameResolver {
 	 */
 	//TODO: exception if any of the players who haven't lost didn't choose a card.
 	//TODO: fix infinite loop if a card wasn't chosen if creating exception doesn't fix.
-	public void roundResolve(){
+	public void roundResolve()
+	throws NotEveryoneChoseCardException{
 		int PirateCount = 0;
+		int CardCount = 0;
 		for(Pirate p: game.getPirateOrder()){
 			if(p.isAlive())
 				PirateCount++;
+			if(p.getLastPlayedCard()<8)
+				CardCount++;
 		}
+		if(PirateCount != CardCount)
+			throw new NotEveryoneChoseCardException();
+		
 		int getLowestCard;
 		boolean isUnique;
 		while(PirateCount > 0){
@@ -84,6 +92,11 @@ public class GameResolver {
 		game.getPirateOrder().remove(game.getPirateOrder().size() - 1);
 		if(pirateToBite.isAlive()){
 			game.getPirateOrder().add(0, pirateToBite);
+		}
+		//recover cards if only 2 left to any pirate
+		for(Pirate p: game.getPirateOrder()){
+			if(p.availableCards.size() <= 2)
+				p.RecoverHand();
 		}
 	}
 	/**

@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import croc.exceptions.NotEveryoneChoseCardException;
 import croc.exceptions.PlayerAmountException;
+import croc.exceptions.UnavailableCardException;
 import croc.models.Game;
 import croc.models.PirateColor;
 import croc.models.Player;
@@ -69,7 +71,7 @@ public class GameResolverTest {
 	}
 	
 	@Test
-	public void rightPirateOrderTests() throws PlayerAmountException {
+	public void rightPirateOrderTests() throws PlayerAmountException, UnavailableCardException, NotEveryoneChoseCardException {
 		//init
 		GameBuilder gb = new GameBuilder(4);
 		gb.chooseColor(PirateColor.WHITE);
@@ -103,7 +105,7 @@ public class GameResolverTest {
 	}
 	
 	@Test
-	public void PlayerLossRecognitionTest() throws PlayerAmountException {
+	public void PlayerLossRecognitionTest() throws PlayerAmountException, UnavailableCardException, NotEveryoneChoseCardException {
 		//init
 		GameBuilder gb = new GameBuilder(4);
 		gb.chooseColor(PirateColor.WHITE);

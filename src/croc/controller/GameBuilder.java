@@ -34,6 +34,10 @@ public class GameBuilder {
 	 */
 	PirateColor[] colors;
 	
+	Boolean[] areBots;
+	
+	private int chosenBotCount;
+	
 	//to pair with a selection of player amount in gui
 	public GameBuilder(int playerCount_)
 		throws PlayerAmountException{
@@ -41,13 +45,18 @@ public class GameBuilder {
 				throw new PlayerAmountException();
 			else{
 			playerCount = playerCount_;
+			chosenBotCount = 0;
+			chosenColorCount = 0;
+			chosenNameCount = 0;
 			if(playerCount_ > 3){
 				names = new String[playerCount_];
 				colors = new PirateColor[playerCount_];
+				areBots = new Boolean[playerCount_];
 			}
 			else{
 				names = new String[playerCount_];
 				colors = new PirateColor[playerCount_*2];
+				areBots = new Boolean[playerCount_];
 			}
 		}
 	}
@@ -68,6 +77,11 @@ public class GameBuilder {
 			e.getMessage();
 			return false;
 		}
+	}
+	
+	public void chooseBot(Boolean isBot){
+		areBots[chosenBotCount] = isBot;
+		chosenBotCount++;
 	}
 	
 	//add a screen for each player to pick a color (and a name maybe if same screen)
@@ -96,7 +110,7 @@ public class GameBuilder {
 		Player[] players = new Player[playerCount];
 		if(playerCount == 3 || playerCount == 2){
 			for(int i = 0; i < playerCount; i++){
-				players[i] = new Player(cardamount,names[i],colors[i*2],colors[i*2+1]);
+				players[i] = new Player(cardamount,names[i],colors[i*2],colors[i*2+1],areBots[i]);
 			}
 		}
 		else{
@@ -105,7 +119,7 @@ public class GameBuilder {
 			if(playerCount == 4)
 				cardamount = 5;
 			for(int i = 0; i < playerCount; i++){
-				players[i] = new Player(cardamount,names[i],colors[i]);
+				players[i] = new Player(cardamount,names[i],colors[i],areBots[i]);
 				
 			}
 		}

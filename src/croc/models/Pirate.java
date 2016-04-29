@@ -1,4 +1,10 @@
 package croc.models;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import croc.exceptions.UnavailableCardException;
+
 /**
  * Holds data revelant to the Pirate.
  * @author sykefu
@@ -12,6 +18,8 @@ public class Pirate {
 	int limbCount;
 	public final PirateColor color;
 	public Card[] cards;
+	//TODO: add unit tests to see is available cards always work correctly.
+	public ArrayList<Card> availableCards;
 	private int lastPlayedCard;
 	final public Player owner;
 	
@@ -39,8 +47,11 @@ public class Pirate {
 		limbCount = 4;
 		color = color_;
 		cards = new Card[cardAmount];
+		availableCards = new ArrayList<Card>();
 		for(int i = 1; i <= cardAmount; i++)
 			cards[i-1] = new Card(i);
+		for(int i = 0; i < cards.length; i++)
+			availableCards.add(cards[i]);
 		owner = owner_;
 	}
 	
@@ -129,28 +140,35 @@ public class Pirate {
 		return limbCount;
 	}
 	
-	private void RecoverHand(){
+	public void RecoverHand(){
 		for(int i = 0; i < cards.length; i++){
 			cards[i].recoverCard();
 		}
+		availableCards.clear();
+		for(int i = 0; i < cards.length; i++)
+			availableCards.add(cards[i]);
 	}
 	/**
 	 * Plays a card (1-7 to 1-5 depending on amount of players).
 	 * @param cardValue value of card played
 	 * @return value of card played, -1 if error
 	 */
-	public int playCard(int cardValue){
-		try {
+	public int playCard(int cardValue) throws UnavailableCardException{
+		if(cards[cardValue-1] != null){
 			if(cards[cardValue-1].isInHand()){
 				cards[cardValue-1].playCard();
 				lastPlayedCard = cards[cardValue-1].value;
+				for(int i = 0; i < availableCards.size(); i++){
+					if(availableCards.get(i).value == cards[cardValue-1].value)
+						availableCards.remove(i);
+				}
 				return cards[cardValue-1].value;
 			}
 			else
-				return -1;
-		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("Should play a card you have");
-			return -1;
+				throw new UnavailableCardException();
+		}
+		else{
+			throw new UnavailableCardException();
 		}
 	}
 	
@@ -176,6 +194,20 @@ public class Pirate {
 		}
 		else
 			return false;
+		
+	}
+	/**
+	 * method to make the bot choose a card, random card available for now.
+	 */
+	public void botCardChooser(){
+		Random rand = new Random();
+		int cardChosen = rand.nextInt(availableCards.size());
+		try {
+			playCard(availableCards.get(cardChosen).value); //to get value and not slot in array
+		} catch (UnavailableCardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }

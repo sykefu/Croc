@@ -2,7 +2,6 @@ package croc.models;
 
 public class Card {
 	public final int value;
-	@SuppressWarnings("unused")
 	private boolean inHand;
 	
 	public Card(int value_){
