@@ -49,6 +49,8 @@ public class GameInputProcessor implements InputProcessor {
 						g.selectCount++;
 						if(g.selectCount == g.croc.getPlayers()[g.nextPlayer].pirates.length){
 							g.playedCount++;
+							if(g.croc.getPlayers().length <= 3)
+								g.playedCount++;
 							g.selectCount = 0;
 							g.selectNextPlayer();
 						}
@@ -70,6 +72,8 @@ public class GameInputProcessor implements InputProcessor {
 								g.selectCount++;
 								if(g.selectCount == g.croc.getPlayers()[g.nextPlayer].pirates.length){
 									g.playedCount++;
+									if(g.croc.getPlayers().length <= 3)
+										g.playedCount++;
 									g.selectCount = 0;
 									g.selectNextPlayer();
 								}

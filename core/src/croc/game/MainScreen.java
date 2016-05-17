@@ -102,7 +102,7 @@ public class MainScreen implements Screen{
 	TextButton startGame;
 	
 	public MainScreen(Game game_){
-		players = 0;
+		players = 0; 
 		distants = 0;
 		connected = 0;
 		game = game_;
@@ -154,6 +154,8 @@ public class MainScreen implements Screen{
 				
 			}
 		};;
+		playerAmount.button("2", 2);
+		playerAmount.button("3", 3);
 		playerAmount.button("4", 4);
 		playerAmount.button("5", 5);
 		playerAmount.button("6", 6);
@@ -242,7 +244,12 @@ public class MainScreen implements Screen{
 							gb.chooseRemote(false);
 						}
 						for(int i = 0; i < players; i++){
-							gb.chooseColor(playerColors[i].getSelected());
+							if(players > 3)
+								gb.chooseColor(playerColors[i].getSelected());
+							else{
+								gb.chooseColor(playerColors[i*2].getSelected());
+								gb.chooseColor(playerColors[i*2+1].getSelected());
+							}
 							gb.chooseName(playerNames[i]);
 							//add bots mb
 							gb.chooseBot(false);
@@ -294,9 +301,9 @@ public class MainScreen implements Screen{
 		camera.unproject(cursor);
 		//begin a new batch and draws everything
 		batch.begin();
-		batch.draw(createImage, -50, 0);
-		batch.draw(joinImage, -50, -75);
-		batch.draw(exitImage, -50, -150);
+		batch.draw(createImage, -camera.position.x, -camera.position.y);
+		batch.draw(joinImage, -camera.position.x, -camera.position.y);
+		batch.draw(exitImage, -camera.position.x, -camera.position.y);
 		batch.end();
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();

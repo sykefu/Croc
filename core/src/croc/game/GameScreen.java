@@ -69,6 +69,11 @@ public class GameScreen implements Screen{
 	Texture leftLeg;
 	Texture rightLeg;
 	
+	Texture gameBoard;
+	Texture shark;
+	Texture handBoard;
+	Texture background;
+	
 	Integer nextPlayer = null;
 	boolean turnBegin;
 	int playedCount;
@@ -96,6 +101,10 @@ public class GameScreen implements Screen{
 		rightArm = new Texture(Gdx.files.internal("data/rightArm.png"));
 		leftLeg = new Texture(Gdx.files.internal("data/leftLeg.png"));
 		rightLeg = new Texture(Gdx.files.internal("data/rightLeg.png"));
+		gameBoard = new Texture(Gdx.files.internal("data/gameboard.png"));
+		shark = new Texture(Gdx.files.internal("data/shark.png"));
+		handBoard = new Texture(Gdx.files.internal("data/handboard.png"));
+		background = new Texture(Gdx.files.internal("data/background.png"));
 		batch = new SpriteBatch();
 		cursor = new Vector3();
 		inputProcessor = new GameInputProcessor(this);
@@ -107,12 +116,11 @@ public class GameScreen implements Screen{
 			cards[i] = new Texture(Gdx.files.internal("data/"+(i+1)+".png"));
 			pCardSelector[i] = new DataRectangle(50+ i*50, 0, 50, 33, i+1);
 			if(croc.getPlayers().length <= 3){
-				pCardSelector[i] = new DataRectangle(50+ i*50, 75, 50, 33, i+1);
+				System.out.println("derp");
+				pCardSelector2[i] = new DataRectangle(50+ i*50, 75, 50, 33, i+1);
 			}
 		}
 		selectNextPlayer();
-		//pCardSelector[i], 0, i*75 50 33
-		
 	}
 	
 	public void pirateColor(Pirate p){
@@ -186,9 +194,14 @@ public class GameScreen implements Screen{
 		}
 		if(nextPlayerTemp == nextPlayer)
 			nextPlayer = null;
-		System.out.println(nextPlayer);
 	}
 	
+	public void drawBgandProps(){
+		batch.draw(background, -camera.position.x, -camera.position.y);
+		batch.draw(gameBoard, -camera.position.x, -camera.position.y);
+		batch.draw(handBoard, -camera.position.x, -camera.position.y);
+		batch.draw(shark, -camera.position.x, -camera.position.y);
+	}
 	
 	@Override
 	public void show() {
@@ -211,16 +224,16 @@ public class GameScreen implements Screen{
 		camera.unproject(cursor);
 		//begin a new batch and draws everything
 		batch.begin();
+		drawBgandProps();
 		DrawPlayedCards();
 		DrawPlayerAvailableCards();
 		DrawPirates();
 		batch.end();
 		if(playedCount == croc.getPirateOrder().size()){
-			System.out.println("derp");
 			try {
 				gr.roundResolve();
 			} catch (NotEveryoneChoseCardException e) {
-				System.out.println("How do bots even manage to not choose a card ?");
+				System.out.println("How you even manage not to choose a card ?");
 				e.printStackTrace();
 			}
 			if(!firstRound){
@@ -233,6 +246,12 @@ public class GameScreen implements Screen{
 				gr.hasLost(p);
 			for(Pirate p: croc.getPirateOrder())
 				p.hasPlayed = false;
+			if(croc.getWinner() != null){
+				if(!croc.getWinner().isRemote)
+					game.setScreen(new EndScreen(game, croc.getWinner(), true));
+				else
+					game.setScreen(new EndScreen(game, croc.getWinner(), false));
+			}
 			selectNextPlayer();
 		}
 	}
