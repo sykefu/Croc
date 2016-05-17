@@ -3,6 +3,7 @@ package croc.models;
 import java.util.ArrayList;
 import java.util.Random;
 
+import croc.controller.AIBox;
 import croc.exceptions.UnavailableCardException;
 
 /**
@@ -23,6 +24,7 @@ public class Pirate {
 	private int lastPlayedCard;
 	public boolean hasPlayed;
 	final public Player owner;
+	private AIBox ai;
 	
 	public int getLastPlayedCard(){
 		return lastPlayedCard;
@@ -56,6 +58,7 @@ public class Pirate {
 		for(int i = 0; i < cards.length; i++)
 			availableCards.add(cards[i]);
 		owner = owner_;
+		ai = new AIBox(this);
 	}
 	
 	public boolean isAlive(){
@@ -203,10 +206,23 @@ public class Pirate {
 	 * method to make the bot choose a card, random card available for now.
 	 */
 	public void botCardChooser(){
+		ai.increasingValuation();
+		int maxVal = 0;
+		for(int i = 0; i < ai.val.size(); i++){
+			maxVal += ai.val.get(i);
+		}
 		Random rand = new Random();
-		int cardChosen = rand.nextInt(availableCards.size());
+		int randChosen = rand.nextInt(maxVal);
+		int counter=0;
+		int loop=0;
+		while(randChosen >= counter){
+			counter+=ai.val.get(loop);
+			if(randChosen >= counter)
+				loop++;
+		}
+		ai.val = new ArrayList<Integer>();
 		try {
-			playCard(availableCards.get(cardChosen).value); //to get value and not slot in array
+			playCard(availableCards.get(loop).value); //to get value and not slot in array
 		} catch (UnavailableCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

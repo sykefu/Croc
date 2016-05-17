@@ -121,6 +121,7 @@ public class GameScreen implements Screen{
 				pCardSelector2[i] = new DataRectangle(50+ i*50, 75, 50, 33, i+1);
 			}
 		}
+		gr.gameInit();
 		for(Pirate p : croc.getPirateOrder()){
 			if(p.owner.isBot){
 				p.botCardChooser();

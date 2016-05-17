@@ -20,7 +20,13 @@ public class GameResolver {
 	 *  Shuffle pirates in piratesOrder ArrayList.
 	 */
 	public void gameInit(){
-		//just take 2 random pirate and swap, do it a few times. random enough.
+		Pirate tempSwap;
+		for(int i = 0; i<30;i++){
+			int j = (int) Math.round(Math.random()*(game.getPirateOrder().size()-1));
+			tempSwap = game.getPirateOrder().get(j);
+			game.getPirateOrder().remove(j);
+			game.getPirateOrder().add(game.getPirateOrder().size(), tempSwap);
+		}
 	}
 	/**
 	 * Gives out the new order for the pirate.
