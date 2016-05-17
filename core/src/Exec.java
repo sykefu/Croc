@@ -8,7 +8,7 @@ import croc.exceptions.PlayerAmountException;
 @SuppressWarnings("unused")
 public class Exec {
 
-	public static void main ( String[] args) throws PlayerAmountException{
+	/*public static void main ( String[] args) throws PlayerAmountException{
 		
 		GameBuilder gb = new GameBuilder(7);
 		gb.chooseColor(PirateColor.WHITE);
@@ -27,5 +27,5 @@ public class Exec {
 		gb.chooseName("seven");
 		GameSimulator gs = new GameSimulator(gb);
 		gs.PlayBotGame();
-	}
+	}*/
 }

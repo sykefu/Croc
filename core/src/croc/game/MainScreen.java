@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -100,6 +101,7 @@ public class MainScreen implements Screen{
 	TextArea[] localPlayerNames;
 	String[] playerNames;
 	TextButton startGame;
+	CheckBox[] bots;
 	
 	public MainScreen(Game game_){
 		players = 0; 
@@ -186,6 +188,7 @@ public class MainScreen implements Screen{
 	@SuppressWarnings("unchecked")
 	private void generateGameSettings(){
 		localPlayerNames = new TextArea[players - distants];
+		bots = new CheckBox[players - distants];
 
 		if(players > 3){
 			 playerColors = new SelectBox[players];
@@ -211,6 +214,8 @@ public class MainScreen implements Screen{
 			if(i<players-distants){
 				localPlayerNames[i] = new TextArea("",skin);
 				createGame.add(localPlayerNames[i]);
+				bots[i] = new CheckBox("bot",skin);
+				createGame.add(bots[i]);
 			}
 			else{
 				createGame.add(new Label("Distant player "+ Integer.toString(i + (distants - players) +1), skin));
@@ -241,6 +246,7 @@ public class MainScreen implements Screen{
 						GameBuilder gb = new GameBuilder(players);
 						for(int i = 0; i < players - distants; i++){
 							playerNames[i] = localPlayerNames[i].getText();
+							gb.chooseBot(bots[i].isChecked());
 							gb.chooseRemote(false);
 						}
 						for(int i = 0; i < players; i++){
@@ -252,7 +258,8 @@ public class MainScreen implements Screen{
 							}
 							gb.chooseName(playerNames[i]);
 							//add bots mb
-							gb.chooseBot(false);
+							if(i >= players - distants)
+								gb.chooseBot(false);
 						}
 						CrGame g = gb.createGame();
 						game.setScreen(new GameScreen(game, g));

@@ -82,10 +82,11 @@ public class GameScreen implements Screen{
 	Boolean firstRound;
 	int selectCount;
 	GameResolver gr;
-	
+	Boolean sharkTurn;
 	
 	
 	public GameScreen(Game g_, CrGame cg_){
+		sharkTurn = false;
 		gr = new GameResolver(cg_);
 		firstRound = true;
 		playedCount = 0;
@@ -118,6 +119,12 @@ public class GameScreen implements Screen{
 			if(croc.getPlayers().length <= 3){
 				System.out.println("derp");
 				pCardSelector2[i] = new DataRectangle(50+ i*50, 75, 50, 33, i+1);
+			}
+		}
+		for(Pirate p : croc.getPirateOrder()){
+			if(p.owner.isBot){
+				p.botCardChooser();
+				playedCount++;
 			}
 		}
 		selectNextPlayer();
@@ -224,22 +231,22 @@ public class GameScreen implements Screen{
 		camera.unproject(cursor);
 		//begin a new batch and draws everything
 		batch.begin();
+		batch.setColor(Color.WHITE);
 		drawBgandProps();
 		DrawPlayedCards();
 		DrawPlayerAvailableCards();
 		DrawPirates();
 		batch.end();
-		if(playedCount == croc.getPirateOrder().size()){
+
+		if(sharkTurn && !firstRound){
 			try {
-				gr.roundResolve();
-			} catch (NotEveryoneChoseCardException e) {
-				System.out.println("How you even manage not to choose a card ?");
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(!firstRound){
-				gr.sharkTurn();
-			}
-			firstRound = false;
+			gr.sharkTurn();
+			
 			playedCount = 0;
 			gr.victoryCondition();
 			for(Player p: croc.getPlayers())
@@ -247,12 +254,47 @@ public class GameScreen implements Screen{
 			for(Pirate p: croc.getPirateOrder())
 				p.hasPlayed = false;
 			if(croc.getWinner() != null){
-				if(!croc.getWinner().isRemote)
+				if(!croc.getWinner().isRemote && !croc.getWinner().isBot)
 					game.setScreen(new EndScreen(game, croc.getWinner(), true));
 				else
 					game.setScreen(new EndScreen(game, croc.getWinner(), false));
 			}
-			selectNextPlayer();
+			for(Pirate p : croc.getPirateOrder()){
+				if(p.owner.isBot){
+					p.botCardChooser();
+					playedCount++;
+				}
+			}
+			sharkTurn = false;
+			selectNextPlayer();	
+		}
+		
+		if(playedCount == croc.getPirateOrder().size()){
+			try {
+				gr.roundResolve();
+				batch.begin();
+				batch.setColor(Color.WHITE);
+				drawBgandProps();
+				DrawPlayedCards();
+				DrawPlayerAvailableCards();
+				DrawPirates();
+				batch.end();
+			} catch (NotEveryoneChoseCardException e) {
+			}
+			if(firstRound){
+				firstRound = false;
+				playedCount = 0;
+				for(Pirate p : croc.getPirateOrder()){
+					if(p.owner.isBot){
+						p.botCardChooser();
+						playedCount++;
+					}
+				}
+				selectNextPlayer();
+			}
+			else{
+				sharkTurn = true;
+			}
 		}
 	}
 	
