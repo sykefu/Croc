@@ -330,4 +330,18 @@ public class GameScreen implements Screen{
 		
 	}
 	
+	// TODO: Séparer le traitement qui relève du serveur et le déplacer dans une nouvelle classe ComputeEngine. Cette nouvelle classe herite de ComputeInterface qui définit toutes les methodes utiles au client. ComputeEngine doit gérer la résolution des tours.
+	
+	public ComputeInterface startClient() {
+		return new ComputeEngine();
+	}
+	
+	public ComputeInterface distantConnectToServer(String ip, int port) throws RemoteException, NotBoundException {
+		String name = "Compute";
+    	Registry registry = LocateRegistry.getRegistry(serverPort);
+//    	Registry r = new Registry().connect("localhost", serverPort);
+    	ComputeInterface comp = (ComputeInterface) registry.lookup(name);
+    	return comp;
+	}
+	
 }

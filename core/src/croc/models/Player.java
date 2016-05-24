@@ -1,12 +1,16 @@
 package croc.models;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  * Hold all data used or linked to a player
  * @author sykefu
  *
  */
-public class Player {
+public class Player extends UnicastRemoteObject {
+
+	private static final long serialVersionUID = 1L;
 	final public String name;
 	public Card[] cards;
 	public Pirate[] pirates;
@@ -14,7 +18,7 @@ public class Player {
 	public Boolean isBot;
 	public Boolean isRemote;
 	
-	public Player(int cardAmount, String name_, PirateColor color, Boolean isBot_){
+	public Player(int cardAmount, String name_, PirateColor color, Boolean isBot_) throws RemoteException {
 		name = name_;
 		
 		pirates = new Pirate[1];
@@ -24,7 +28,7 @@ public class Player {
 		isRemote = false;
 	}
 	
-	public Player(int cardAmount, String name_, PirateColor colorOne, PirateColor colorTwo, Boolean isBot_){
+	public Player(int cardAmount, String name_, PirateColor colorOne, PirateColor colorTwo, Boolean isBot_)throws RemoteException {
 		name = name_;
 		
 		pirates = new Pirate[2];
@@ -35,7 +39,7 @@ public class Player {
 		isRemote = false;
 	}
 	
-	public Player(int cardAmount, String name_, PirateColor color, Boolean isBot_, Boolean isRemote_){
+	public Player(int cardAmount, String name_, PirateColor color, Boolean isBot_, Boolean isRemote_)throws RemoteException {
 		name = name_;
 		
 		pirates = new Pirate[1];
@@ -45,7 +49,7 @@ public class Player {
 		isRemote = isRemote_;
 	}
 	
-	public Player(int cardAmount, String name_, PirateColor colorOne, PirateColor colorTwo, Boolean isBot_, Boolean isRemote_){
+	public Player(int cardAmount, String name_, PirateColor colorOne, PirateColor colorTwo, Boolean isBot_, Boolean isRemote_)throws RemoteException {
 		name = name_;
 		
 		pirates = new Pirate[2];
