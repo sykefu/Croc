@@ -1,8 +1,12 @@
 package croc.models;
 
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
-public class CrGame {
+// server-side game
+public class CrGame extends UnicastRemoteObject implements CrGameInterface {
+
+	private static final long serialVersionUID = 1L;
 	Player[] players;
 	Player winner;
 	ArrayList<Pirate> pirateOrder;
@@ -21,6 +25,7 @@ public class CrGame {
 	/**
 	 * @return the players
 	 */
+	@Override
 	public Player[] getPlayers() {
 		return players;
 	}
@@ -28,10 +33,12 @@ public class CrGame {
 	/**
 	 * @return the pirateOrder
 	 */
+	@Override
 	public ArrayList<Pirate> getPirateOrder() {
 		return pirateOrder;
 	}
 
+	@Override
 	public Player getWinner() {
 		return winner;
 	}

@@ -1,5 +1,6 @@
 package croc.models;
 
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -11,7 +12,11 @@ import croc.exceptions.UnavailableCardException;
  * @author sykefu
  *
  */
-public class Pirate {
+
+// server-side pirate
+public class Pirate extends UnicastRemoteObject implements RemotePlayer {
+
+	private static final long serialVersionUID = 1L;
 	boolean leftLeg;
 	boolean rightLeg;
 	boolean leftArm;
